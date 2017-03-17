@@ -2,11 +2,15 @@
 <head>
     <meta charset="utf-8" />
     <title>Cartographie thématique et analyse spatiale</title>
-    <script src="http://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 <body>
     <h1>Bonjour.</h1>
     <p class="hide">Votre numéro de chance est le {{ random }}.</p>
+    <div id="mapdiv"></div>
+    <script src="{{ url_for('static', filename='index.js') }}"></script>
 </body>
 </html>
