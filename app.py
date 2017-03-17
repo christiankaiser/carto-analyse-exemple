@@ -31,8 +31,20 @@ def cantons():
                    FROM k4_cantons_vf""")
     # et demander l'ensemble du résultat de la requête:
     cantons = cur.fetchall()
+    # créer la structure des données pour GeoJSON:
+    features = []
+    for row in cantons:
+        features.append({ 
+            "type": "Feature", 
+            "properties": { "geocode": row[0], "nom": row[1] },
+            "geometry": json.loads(row[2])
+        })
+    feature_collection = {
+        "type": "FeatureCollection",
+        "features": features
+    }
     # retourner le résultat en format JSON:
-    return flask.jsonify(cantons)
+    return flask.jsonify(feature_collection)
 
 
 if __name__ == '__main__':
