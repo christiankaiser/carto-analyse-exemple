@@ -5,11 +5,12 @@ $.getJSON('/cantons', function(data){
 });
 
 var styleFn = function(feature){
+  var v = feature.properties.rapport_gde_petites_entreprises * 100;
   return {
-    fillColor: '#669966',   // couleur de remplissage
-    fillOpacity: 1,         // opacité du remplissage
-    opacity: 1,             // opacité du contour
-    weight: 0.4,            // largeur du contour
-    color: '#ffffff',       // couleur de contour
+    fillColor: 'rgb(120, '+ parseInt(v) +', 120)',
+    fillOpacity: 1,
+    opacity: 1, 
+    weight: 0.4, 
+    color: '#ffffff', 
   };
 };
