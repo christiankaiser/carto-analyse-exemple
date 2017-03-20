@@ -18,7 +18,23 @@ $.getJSON('/cantons', function(data){
   brew.classify('jenks');
 
   L.geoJSON(data, {style: styleFn}).addTo(map);
+
+  addLegend(map, brew)
 });
+
+
+var addLegend = function(map, brew){
+  var legend = L.control({position: 'topright'});
+
+  legend.onAdd = function(map){
+      var div = L.DomUtil.create('div', 'legend');
+      div.innerHTML = '<p>Hello Suisse!</p>';
+      return div;
+  };
+
+  legend.addTo(map);
+};
+
 
 var styleFn = function(feature){
   var v = feature.properties.rapport_gde_petites_entreprises;
