@@ -1,6 +1,11 @@
-var map = L.map('mapdiv').setView([46.9, 8.2], 8);
+var map = L.map('mapdiv', {
+  minZoom: 7,
+  maxBounds: [[45, 3], [49, 13]]
+}).setView([46.9, 8.2], 8);
 
 var brew;   // variable globale pour l'objet Classybrew
+
+var layers = {};
 
 $.getJSON('/cantons', function(data){
   // Extraction des valeurs en vue de la mise en classes
@@ -17,9 +22,41 @@ $.getJSON('/cantons', function(data){
   brew.setColorCode("Reds");
   brew.classify('jenks');
 
-  L.geoJSON(data, {style: styleFn}).addTo(map);
+  layers.cantons = L.geoJSON(
+    data, {
+      style: styleFn,
+      attribution: 'Fond de carte: OFS, ThemaKart, 2012 | Données: OFS, 2016'
+    }
+  ).addTo(map);
 
   addLegend(map, brew)
+});
+
+
+$.getJSON('/suisse', function(data){
+  layers.suisse_fill = L.geoJSON(data, {
+    style: {
+      fillColor: '#bbb', fillOpacity: 1,
+      opacity: 0, weight: 0
+    }
+  }).addTo(map).bringToBack();
+
+  layers.suisse_line = L.geoJSON(data, {
+    style: {
+      fillOpacity: 0, opacity: 1,
+      weight: 0.8, color: '#000'
+    }
+  }).addTo(map).bringToFront();
+});
+
+
+$.getJSON('/lacs', function(data){
+  layers.lacs = L.geoJSON(data, {
+    style: {
+      fillColor: '#999', fillOpacity: 1,
+      opacity: 0
+    }
+  }).addTo(map).bringToFront();
 });
 
 
@@ -63,3 +100,6 @@ var styleFn = function(feature){
     color: '#ffffff', 
   };
 };
+
+
+L.control.scale({metric: true, imperial: false}).addTo(map);

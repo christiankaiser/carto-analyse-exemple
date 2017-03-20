@@ -15,10 +15,42 @@ app.debug = True
 
 @app.route('/')
 def index():
-    return flask.render_template(
-        'index.html',
-        random=choice(range(1,46))
-    )
+    return flask.render_template('index.html')
+
+
+@app.route('/suisse')
+def suisse():
+    cur = conn.cursor()
+    cur.execute("""SELECT
+            ST_AsGeoJson(ST_Transform(geom, 4326), 7)
+        FROM k4_suisse_simple""")
+    suisse = cur.fetchone()
+    fc = {
+        "type": "FeatureCollection",
+        "features": [{
+            "type": "Feature",
+            "properties": {},
+            "geometry": json.loads(suisse[0])
+        }]
+    }
+    return flask.jsonify(fc)
+
+
+@app.route('/lacs')
+def lacs():
+    cur = conn.cursor()
+    cur.execute("""SELECT ST_AsGeoJson(ST_Transform(geom, 4326), 7)
+        FROM k4_lacs""")
+    lacs = cur.fetchall()
+    fc = {
+        "type": "FeatureCollection",
+        "features": [{
+            "type": "Feature",
+            "properties": {},
+            "geometry": json.loads(row[0])
+        } for row in lacs]
+    }
+    return flask.jsonify(fc)
 
 
 @app.route('/cantons')
