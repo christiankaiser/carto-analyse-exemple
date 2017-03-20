@@ -2,3 +2,16 @@
     height: 600px;
     width: 100%;
 }
+
+div.legend {
+  background-color: #fff;
+  border: 1px #999 solid;
+  max-width: 130px;
+  padding: 0 15px;
+}
+
+div.legend p {
+  font-family: Verdana, sans-serif;
+  font-size: 10px;
+  font-weight: bold;
+}

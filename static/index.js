@@ -24,11 +24,28 @@ $.getJSON('/cantons', function(data){
 
 
 var addLegend = function(map, brew){
+  var breaks = brew.getBreaks(),
+      colors = brew.getColors();
+
+  var n = colors.length;
+
   var legend = L.control({position: 'topright'});
 
   legend.onAdd = function(map){
       var div = L.DomUtil.create('div', 'legend');
-      div.innerHTML = '<p>Hello Suisse!</p>';
+      var svg = '<svg width="130" height="' + (colors.length*20+35) + '">';
+      for (var i=0; i < n; i++){
+        svg += '<rect x="1" y="'+ (10+i*20) +'" width="35" height="19" fill="'+colors[n-i-1]+'" stroke="#fff" stroke-width="1" />';
+      }
+      svg += '<rect x="1" y="10" width="35" height="'+(n*20-1)+'" fill="none" stroke="#000" stroke-width="0.4" />';
+      for (var i=0; i<n; i++){
+        svg += '<line x1="36" y1="'+(10+i*20)+'" x2="42" y2="'+(10+i*20)+'" stroke="#000" stroke-width="0.4" />';
+        svg += '<text font-family="Verdana" font-size="10" x="45" y="'+ (14+i*20) +'">'+ Math.round(breaks[n-i]*1000)/10 +'</text>';
+      }
+      svg += '<line x1="36" y1="'+(9+n*20)+'" x2="42" y2="'+(9+n*20)+'" stroke="#000" stroke-width="0.4" />';
+      svg += '<text font-family="Verdana" font-size="10" x="45" y="'+ (13+n*20) +'">'+ Math.round(breaks[n-i]*1000)/10 +'</text>';
+      svg +=    '</svg>';
+      div.innerHTML = '<p>Nombre de grandes entreprises par 100 petites entreprises</p>' + svg;
       return div;
   };
 
